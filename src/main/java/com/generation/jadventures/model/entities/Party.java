@@ -39,10 +39,10 @@ public class Party {
     private Adventurer party_leader;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "adventurers",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "party",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<Adventurer> adventurers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "quests",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "party_quests",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<Quest> quests;
 }

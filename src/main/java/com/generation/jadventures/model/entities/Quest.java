@@ -36,4 +36,9 @@ public class Quest
     @JoinColumn(name = "guild_id")
     private Guild patron;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "party_id")
+    private Party party_quests;
+
 }
