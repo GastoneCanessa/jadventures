@@ -1,5 +1,9 @@
 package com.generation.jadventures.model.dto.guild;
 
-public class GuildDtoR extends GuildDtoBase {
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
+public class GuildDtoR extends GuildDtoBase 
+{
+    GuildDtoR(){}
 }
