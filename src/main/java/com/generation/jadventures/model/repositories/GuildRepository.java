@@ -6,5 +6,5 @@ import com.generation.jadventures.model.entities.Guild;
 
 public interface GuildRepository extends JpaRepository<Guild, Integer>
 {
-
+    Guild findByName(String name);
 }
