@@ -30,6 +30,6 @@ public class Guild
     private Integer n_employees;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "guild",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "patron",fetch = FetchType.EAGER)
     private List<Quest> posted_quests;
 }
