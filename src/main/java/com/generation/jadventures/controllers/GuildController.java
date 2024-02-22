@@ -1,14 +1,16 @@
 package com.generation.jadventures.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.generation.jadventures.model.dto.guild.GuildDtoWQuest;
+
 import com.generation.jadventures.model.dtoservices.GuildConverter;
 import com.generation.jadventures.model.repositories.GuildRepository;
 
@@ -32,5 +34,4 @@ public class GuildController {
 
         return gConv.guildToDtoWQuest(gRepo.findById(id).get());
     }
-
 }
