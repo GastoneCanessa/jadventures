@@ -28,7 +28,7 @@ public class Quest
     private Integer id;
 
     private LocalDate date_created, date_completed;
-    private String status, rank, area, map_url, description, type;
+    private String status, quest_rank, area, map_url, description, type;
     private Integer reward;
 
     @JsonIgnore
