@@ -55,7 +55,7 @@ public class QuestConverter
                 .build();
     }
 
-    public Quest dtoPutToReview(QuestDtoRput dto)
+    public Quest dtoPutToQuest(QuestDtoRput dto)
     {
         Guild father = null;
         Integer guild_id = dto.getGuild_id();
