@@ -18,7 +18,7 @@ public class QuestConverter
     @Autowired
     GuildRepository repo;
 
-    public QuestDtoWGuild questToDtoBase (Quest q)
+    public QuestDtoWGuild questToDtoWGuild (Quest q)
     {
         return QuestDtoWGuild
                 .builder()
