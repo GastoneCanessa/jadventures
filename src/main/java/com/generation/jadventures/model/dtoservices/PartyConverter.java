@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.generation.jadventures.model.dto.party.PartyDtoNoAdventurers;
 import com.generation.jadventures.model.dto.party.PartyDtoRpost;
 import com.generation.jadventures.model.dto.party.PartyDtoWFull;
+import com.generation.jadventures.model.dto.party.PartyDtoWithQuest;
+import com.generation.jadventures.model.dto.quest.QuestDtoBase;
 import com.generation.jadventures.model.entities.Party;
 import com.generation.jadventures.model.repositories.AdventurerRepository;
 import com.generation.jadventures.model.repositories.PartyRepository;
@@ -24,6 +27,9 @@ public class PartyConverter {
 
     @Autowired
     AdventurerRepository aRepo;
+
+    @Autowired
+    GuildConverter gConv;
 
     public Party DtoRpostToParty(PartyDtoRpost dto) {
 
@@ -47,6 +53,20 @@ public class PartyConverter {
                 .motto(p.getMotto())
                 .party_leader(p.getParty_leader())
                 .adventurers(p.getAdventurers())
+                .party_rank(calculatePartyRank(p))
+                .build();
+    }
+
+    
+
+    public PartyDtoNoAdventurers partyToDtoWPartial(Party p) {
+
+        return PartyDtoNoAdventurers
+                .builder()
+                .id(p.getId())
+                .name(p.getName())
+                .authentication_seal(p.getAuthentication_seal())
+                .motto(p.getMotto())
                 .party_rank(calculatePartyRank(p))
                 .build();
     }

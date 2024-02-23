@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.generation.jadventures.model.dto.quest.QuestDtoBaseWithId;
 import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
 import com.generation.jadventures.model.dto.quest.QuestDtoRput;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
@@ -36,6 +37,23 @@ public class QuestConverter
                 .build();
     }
 
+    public QuestDtoBaseWithId QUestDtoBaseWithId(Quest q)
+    {
+        return QuestDtoBaseWithId
+                .builder()
+                .id(q.getId())
+                .date_created(q.getDate_created())
+                .date_completed(q.getDate_completed())
+                .status(q.getStatus())
+                .quest_rank(q.getQuest_rank())
+                .area(q.getArea())
+                .map_url(q.getMap_url())
+                .description(q.getDescription())
+                .type(q.getType())
+                .reward(q.getReward())
+                .build();
+
+    }
     public Quest dtoPostToQuest(QuestDtoRpost dto)
     {
         Guild father = repo.findById(dto.getGuild_id()).get();

@@ -3,6 +3,7 @@ package com.generation.jadventures.controllers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.generation.jadventures.model.dto.quest.QuestDtoBase;
+import com.generation.jadventures.model.dto.quest.QuestDtoBaseWithId;
 import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
 import com.generation.jadventures.model.dto.quest.QuestDtoRput;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
@@ -71,6 +74,19 @@ public class QuestController {
         } else
             return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
 
+    }
+    //restituisce le quest con id di party
+    @GetMapping("/parties/myquests/{id}")
+    public ResponseEntity<?> getPartyQuests(@PathVariable Integer id)
+    {
+        List<Quest> quests=qRepo.findAll().stream().filter((q)->q.getParty_quests().getId()==id).collect(Collectors.toList());
+        if(quests!= null)
+        {
+            List<QuestDtoBaseWithId> q=quests.stream().map(a->qConv.QUestDtoBaseWithId(a)).collect(Collectors.toList());
+            return new ResponseEntity<List<QuestDtoBaseWithId>>(q, HttpStatus.OK);
+        } 
+        else
+        return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/quests")
@@ -131,4 +147,5 @@ public class QuestController {
             return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.BAD_REQUEST);
     }
 
+    
 }
