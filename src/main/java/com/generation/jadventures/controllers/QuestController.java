@@ -59,7 +59,7 @@ public class QuestController {
             return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.NOT_FOUND);
 
     }
-    // qualcosa
+    // qualcosadsjhfdhgbdfhj
 
     @GetMapping("/quests/byguild/{id}")
     public ResponseEntity<?> getQuestByGuildId(@PathVariable Integer id) {
