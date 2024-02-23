@@ -77,7 +77,10 @@ public class QuestController {
     @PostMapping("/quests")
     public ResponseEntity<?> insertQuest(@RequestBody QuestDtoRpost dto) {
 
+        
+
         Quest q = qConv.dtoPostToQuest(dto);
+        System.out.println(dto);
         if (!possible_rank.contains(q.getQuest_rank()))
             return new ResponseEntity<String>("Hai inserito un rank non valido", HttpStatus.BAD_REQUEST);
 
@@ -87,7 +90,7 @@ public class QuestController {
         if (!possible_status.contains(q.getStatus()))
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
-        if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null) {
+        if (!(q.getStatus().equals("SUCCESS" ) || q.getStatus().equals("FAILED")) && q.getDate_completed() != null) {
             q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
