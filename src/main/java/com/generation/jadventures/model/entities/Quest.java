@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Quest 
-{
+public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,5 +34,7 @@ public class Quest
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guild_id")
     private Guild patron;
+
+    public Object setDate_completed;
 
 }
