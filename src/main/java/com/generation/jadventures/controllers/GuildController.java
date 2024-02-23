@@ -16,7 +16,9 @@ import com.generation.jadventures.model.dto.login.LoginRequest;
 import com.generation.jadventures.model.dtoservices.GuildConverter;
 import com.generation.jadventures.model.entities.Guild;
 import com.generation.jadventures.model.entities.Quest;
+import com.generation.jadventures.model.entities.Quest;
 import com.generation.jadventures.model.repositories.GuildRepository;
+import com.generation.jadventures.model.repositories.QuestRepository;
 import com.generation.jadventures.model.repositories.QuestRepository;
 
 @RestController
@@ -27,6 +29,9 @@ public class GuildController {
 
     @Autowired
     GuildConverter gConv;
+
+    @Autowired
+    QuestRepository qRepo;
 
     @Autowired
     QuestRepository qRepo;
@@ -59,6 +64,7 @@ public class GuildController {
         // alla password
         // Controlla se la gilda esiste e se il sigillo di autenticazione corrisponde
         if (guild != null && guild.getAuthentication_seal().equals(password)) {
+            GuildDtoWQuest guildDto = gConv.guildToDtoWQuest(guild);
             GuildDtoWQuest guildDto = gConv.guildToDtoWQuest(guild);
             return ResponseEntity.ok(guildDto);
         } else {
