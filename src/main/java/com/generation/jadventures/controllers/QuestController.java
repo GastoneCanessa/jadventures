@@ -19,7 +19,6 @@ import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
 import com.generation.jadventures.model.dto.quest.QuestDtoRput;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
 import com.generation.jadventures.model.dtoservices.QuestConverter;
-import com.generation.jadventures.model.entities.Guild;
 import com.generation.jadventures.model.entities.Quest;
 import com.generation.jadventures.model.repositories.GuildRepository;
 import com.generation.jadventures.model.repositories.QuestRepository;
