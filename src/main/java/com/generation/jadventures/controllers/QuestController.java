@@ -88,7 +88,7 @@ public class QuestController {
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
         if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null) {
-            q.setDate_completed = null;
+            q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
 
@@ -111,7 +111,7 @@ public class QuestController {
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
         if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null) {
-            q.setDate_completed = null;
+            q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
 
