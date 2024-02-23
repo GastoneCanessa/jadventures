@@ -1,14 +1,8 @@
 package com.generation.jadventures.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +27,6 @@ public class QuestController {
     @Autowired
     QuestConverter qConv;
 
-    public static List<String> possible_rank = Arrays.asList("S", "A", "B", "C", "D");
-    public static List<String> possible_type = Arrays.asList("dungeon", "monster hunt", "village defense", "errand",
-            "bodyguard", "patrol");
-    public static List<String> possible_status = Arrays.asList("AWAITING", "PENDING", "SUCCESS", "FAILED");
-
     @GetMapping("/quests")
     public List<QuestDtoWGuild> getQuests() {
 
@@ -45,70 +34,29 @@ public class QuestController {
     }
 
     @GetMapping("/quests/{id}")
-    public ResponseEntity<?> getQuest(@PathVariable Integer id) {
+    public QuestDtoWGuild getQuest(@PathVariable Integer id) {
 
-        Optional<Quest> oq = qRepo.findById(id);
-
-        if (oq.isPresent()) {
-
-            Quest q = oq.get();
-            return new ResponseEntity<QuestDtoWGuild>(qConv.questToDtoWGuild(q), HttpStatus.OK);
-        } else
-            return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.NOT_FOUND);
-
+        return qConv.questToDtoWGuild(qRepo.findById(id).get());
     }
 
     @PostMapping("/quests")
-    public ResponseEntity<?> insertQuest(@RequestBody QuestDtoRpost dto) {
+    public void insertQuest(@RequestBody QuestDtoRpost dto) {
 
-        Quest q = qConv.dtoPostToQuest(dto);
-        if (!possible_rank.contains(q.getQuest_rank()))
-            return new ResponseEntity<String>("Hai inserito un rank non valido", HttpStatus.BAD_REQUEST);
-
-        if (!possible_type.contains(q.getType()))
-            return new ResponseEntity<String>("Hai inserito un type non valido", HttpStatus.BAD_REQUEST);
-
-        if (!possible_status.contains(q.getStatus()))
-            return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
-
-        if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null)
-            return new ResponseEntity<String>("Non puoi mettere una data di completamento", HttpStatus.BAD_REQUEST);
-
-        else
-            return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
-
+        qRepo.save(qConv.dtoPostToQuest(dto));
     }
 
     @PutMapping("/quests")
-    public ResponseEntity<?> modifyQuest(@RequestBody QuestDtoRput dto) {
+    public void modifyQuest(@RequestBody QuestDtoRput dto) {
 
         Quest q = qConv.dtoPutToQuest(dto);
-        if (!possible_rank.contains(q.getQuest_rank()))
-            return new ResponseEntity<String>("Hai inserito un rank non valido", HttpStatus.BAD_REQUEST);
 
-        if (!possible_type.contains(q.getType()))
-            return new ResponseEntity<String>("Hai inserito un type non valido", HttpStatus.BAD_REQUEST);
-
-        if (!possible_status.contains(q.getStatus()))
-            return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
-
-        if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null)
-            return new ResponseEntity<String>("Non puoi mettere una data di completamento", HttpStatus.BAD_REQUEST);
-
-        else
-            return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
-
+        qRepo.save(q);
     }
 
     @DeleteMapping("/quests/{id}")
-    public ResponseEntity<?> deleteQuest(@PathVariable Integer id) {
+    public void deleteQuest(@PathVariable Integer id) {
 
-        if (qRepo.findById(id).isPresent()) {
-
-            qRepo.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else
-            return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.BAD_REQUEST);
+        qRepo.deleteById(id);
     }
 
 }
