@@ -59,7 +59,6 @@ public class QuestController {
             return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.NOT_FOUND);
 
     }
-    // qualcosadsjhfdhgbdfhj
 
     @GetMapping("/quests/byguild/{id}")
     public ResponseEntity<?> getQuestByGuildId(@PathVariable Integer id) {
@@ -77,8 +76,6 @@ public class QuestController {
     @PostMapping("/quests")
     public ResponseEntity<?> insertQuest(@RequestBody QuestDtoRpost dto) {
 
-        
-
         Quest q = qConv.dtoPostToQuest(dto);
         System.out.println(dto);
         if (!possible_rank.contains(q.getQuest_rank()))
@@ -90,7 +87,7 @@ public class QuestController {
         if (!possible_status.contains(q.getStatus()))
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
-        if (!(q.getStatus().equals("SUCCESS" ) || q.getStatus().equals("FAILED")) && q.getDate_completed() != null) {
+        if (!(q.getStatus().equals("SUCCESS") || q.getStatus().equals("FAILED"))) {
             q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
@@ -113,7 +110,7 @@ public class QuestController {
         if (!possible_status.contains(q.getStatus()))
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
-        if (!(q.getStatus() == "SUCCESS" || q.getStatus() == "FAILED") && q.getDate_completed() != null) {
+        if (!(q.getStatus().equals("SUCCESS") || q.getStatus().equals("FAILED"))) {
             q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
