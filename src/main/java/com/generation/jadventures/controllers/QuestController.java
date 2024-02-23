@@ -76,9 +76,7 @@ public class QuestController {
 
     @PostMapping("/quests")
     public ResponseEntity<?> insertQuest(@RequestBody QuestDtoRpost dto) {
-
         
-
         Quest q = qConv.dtoPostToQuest(dto);
         System.out.println(dto);
         if (!possible_rank.contains(q.getQuest_rank()))
