@@ -38,6 +38,6 @@ public class Quest {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "party_id")
-    private Party party_quests;
+    private Party myParty;
 
 }

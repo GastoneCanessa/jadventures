@@ -19,8 +19,10 @@ import com.generation.jadventures.model.repositories.PartyRepository;
 
 @Service
 public class QuestConverter {
+
     @Autowired
     GuildRepository repo;
+
     @Autowired
     PartyRepository pRepo;
 
@@ -76,41 +78,36 @@ public class QuestConverter {
                 .build();
     }
 
-    public Quest dtoPutToQuest(QuestDtoRputParty dto) {
-        Guild father = null;
-        Party myParty = null;
-        Integer guild_id = dto.getGuild_id();
-        Integer party_id = dto.getParty_id();
+    // NON SERVE
 
-        if (guild_id != null) {
-            Optional<Guild> op = repo.findById(guild_id);
+    // public Quest dtoPutToQuestParty(QuestDtoRputParty dto) {
 
-            if (op.isPresent())
-                father = op.get();
-        }
-        if (party_id != null) {
-            Optional<Party> pp = pRepo.findById(party_id);
+    // Guild father = null;
+    // Party myParty = null;
+    // Integer guild_id = dto.getGuild_id();
+    // Integer party_id = dto.getParty_id();
 
-            if (pp.isPresent())
-                myParty = pp.get();
-        }
+    // if (guild_id != null) {
+    // Optional<Guild> op = repo.findById(guild_id);
 
-        return Quest
-                .builder()
-                .id(dto.getId())
-                .party_quests(myParty)
-                .date_created(dto.getDate_created())
-                .date_completed(dto.getDate_completed())
-                .status(dto.getStatus())
-                .quest_rank(dto.getQuest_rank())
-                .area(dto.getArea())
-                .map_url(dto.getMap_url())
-                .description(dto.getDescription())
-                .type(dto.getType())
-                .reward(dto.getReward())
-                .patron(father)
-                .build();
-    }
+    // if (op.isPresent())
+    // father = op.get();
+    // }
+
+    // if (party_id != null) {
+    // Optional<Party> pp = pRepo.findById(party_id);
+
+    // if (pp.isPresent())
+    // myParty = pp.get();
+    // }
+
+    // return Quest
+    // .builder()
+    // .id(dto.getId())
+    // .party_quests(myParty)
+    // .patron(father)
+    // .build();
+    // }
 
     public Quest dtoPutToQuest(QuestDtoRputGuild dto) {
         Guild father = null;

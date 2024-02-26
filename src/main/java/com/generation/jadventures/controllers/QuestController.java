@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +18,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.generation.jadventures.model.dto.quest.QuestDtoBase;
 import com.generation.jadventures.model.dto.quest.QuestDtoBaseWithId;
 import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
-import com.generation.jadventures.model.dto.quest.QuestDtoRputParty;
 import com.generation.jadventures.model.dto.quest.QuestDtoRputGuild;
+import com.generation.jadventures.model.dto.quest.QuestDtoRputParty;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
 import com.generation.jadventures.model.dtoservices.QuestConverter;
+import com.generation.jadventures.model.entities.Party;
 import com.generation.jadventures.model.entities.Quest;
 import com.generation.jadventures.model.repositories.GuildRepository;
+import com.generation.jadventures.model.repositories.PartyRepository;
 import com.generation.jadventures.model.repositories.QuestRepository;
 
 @RestController
@@ -41,6 +41,9 @@ public class QuestController {
 
     @Autowired
     GuildRepository gRepo;
+
+    @Autowired
+    PartyRepository pRepo;
 
     public static List<String> possible_rank = Arrays.asList("S", "A", "B", "C", "D");
     public static List<String> possible_type = Arrays.asList("dungeon", "monster hunt", "village defense", "errand",
@@ -96,7 +99,7 @@ public class QuestController {
     // restituisce le quest con id di party
     @GetMapping("/parties/myquests/{id}")
     public ResponseEntity<?> getPartyQuests(@PathVariable Integer id) {
-        List<Quest> quests = qRepo.findAll().stream().filter((q) -> q.getParty_quests().getId() == id)
+        List<Quest> quests = qRepo.findAll().stream().filter((q) -> q.getMyParty().getId() == id)
                 .collect(Collectors.toList());
         if (quests != null) {
             List<QuestDtoBaseWithId> q = quests.stream().map(a -> qConv.QUestDtoBaseWithId(a))
@@ -156,7 +159,8 @@ public class QuestController {
     @PutMapping("/quests/byparty")
     public ResponseEntity<?> modifyQuestByParty(@RequestBody QuestDtoRputParty dto) {
 
-        Quest q = qConv.dtoPutToQuest(dto);
+        Quest q = qRepo.findById(dto.getId()).get();
+        Party p = pRepo.findById(dto.getParty_id()).get();
 
         Map<String, Integer> rankToNumber = new HashMap<>();
 
@@ -166,11 +170,12 @@ public class QuestController {
         rankToNumber.put("C", 2);
         rankToNumber.put("D", 1);
 
-        int rankParty = rankToNumber.get(q.getParty_quests().getRank());
+        int rankParty = rankToNumber.get(p.getRank());
         int rankQuest = rankToNumber.get(q.getQuest_rank());
 
         if (rankParty >= rankQuest) {
             q.setStatus("PENDING");
+            q.setMyParty(p);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
 

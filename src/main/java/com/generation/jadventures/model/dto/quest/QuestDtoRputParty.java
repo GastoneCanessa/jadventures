@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class QuestDtoRputParty extends QuestDtoBase {
+public class QuestDtoRputParty {
 
     private Integer id;
     private Integer guild_id;
