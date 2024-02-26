@@ -13,4 +13,5 @@ public class QuestDtoRput extends QuestDtoBase {
 
     private Integer id;
     private Integer guild_id;
+    private Integer party_id;
 }
