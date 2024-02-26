@@ -1,4 +1,4 @@
-package com.generation.jadventures.model.dto.quest;
+package com.generation.jadventures.model.dto.party;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class QuestDtoRput extends QuestDtoBase {
-
+public class PartyDtoNoAdventurers extends PartyDtoBase
+{
     private Integer id;
-    private Integer guild_id;
+    private String party_rank;
 }

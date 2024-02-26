@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Quest 
-{
+public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -39,6 +38,6 @@ public class Quest
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "party_id")
-    private Party party_quests;
+    private Party myParty;
 
 }
