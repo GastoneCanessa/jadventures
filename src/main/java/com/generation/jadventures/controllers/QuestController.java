@@ -1,7 +1,9 @@
 package com.generation.jadventures.controllers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,11 +91,26 @@ public class QuestController {
         return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
     }
 
+    //restituisce le quest available
+    @GetMapping("/availableQuest")
+    public ResponseEntity<?> getAvailableQuests()
+    {
+        List<Quest> quests=qRepo.findAll().stream().filter((q)->q.getStatus().equals("AWAITING")).collect(Collectors.toList());
+        if(quests!= null)
+        {
+            List<QuestDtoBaseWithId> q=quests.stream().map(a->qConv.QUestDtoBaseWithId(a)).collect(Collectors.toList());
+            return new ResponseEntity<List<QuestDtoBaseWithId>>(q, HttpStatus.OK);
+        } 
+        else
+        return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/quests")
     public ResponseEntity<?> insertQuest(@RequestBody QuestDtoRpost dto) {
 
         Quest q = qConv.dtoPostToQuest(dto);
         System.out.println(dto);
+        
         if (!possible_rank.contains(q.getQuest_rank()))
             return new ResponseEntity<String>("Hai inserito un rank non valido", HttpStatus.BAD_REQUEST);
 
@@ -117,6 +134,17 @@ public class QuestController {
     public ResponseEntity<?> modifyQuest(@RequestBody QuestDtoRput dto) {
 
         Quest q = qConv.dtoPutToQuest(dto);
+
+        Map<String, Integer> rankToNumber = new HashMap<>();
+
+        rankToNumber.put("S", 5);
+        rankToNumber.put("A", 4);
+        rankToNumber.put("B", 3);
+        rankToNumber.put("C", 2);
+        rankToNumber.put("D", 1);
+
+        if (rankToNumber.get(q.getQuest_rank())<= rankToNumber.get(q.getParty_quests().getRank()))
+            return new ResponseEntity<String>("Il rank è troppo elevato per il tuo party", HttpStatus.BAD_REQUEST);
         if (!possible_rank.contains(q.getQuest_rank()))
             return new ResponseEntity<String>("Hai inserito un rank non valido", HttpStatus.BAD_REQUEST);
 

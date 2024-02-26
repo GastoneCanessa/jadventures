@@ -10,14 +10,19 @@ import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
 import com.generation.jadventures.model.dto.quest.QuestDtoRput;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
 import com.generation.jadventures.model.entities.Guild;
+import com.generation.jadventures.model.entities.Party;
 import com.generation.jadventures.model.entities.Quest;
 import com.generation.jadventures.model.repositories.GuildRepository;
+import com.generation.jadventures.model.repositories.PartyRepository;
 
 @Service
 public class QuestConverter 
 {
     @Autowired
     GuildRepository repo;
+
+    @Autowired
+    PartyRepository pRepo;
 
     public QuestDtoWGuild questToDtoWGuild (Quest q)
     {
@@ -75,6 +80,17 @@ public class QuestConverter
 
     public Quest dtoPutToQuest(QuestDtoRput dto)
     {
+        Party party = null;
+        Integer party_id = dto.getParty_id();
+
+        if(party_id!=null)
+        {
+            Optional<Party> op = pRepo.findById(party_id);
+
+            if(op.isPresent())
+                party = op.get();
+        }
+
         Guild father = null;
         Integer guild_id = dto.getGuild_id();
 
@@ -99,6 +115,7 @@ public class QuestConverter
                 .type(dto.getType())
                 .reward(dto.getReward())
                 .patron(father)
+                .party_quests(party)
                 .build();
     }
 }
