@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.generation.jadventures.model.dto.quest.QuestDtoBase;
 import com.generation.jadventures.model.dto.quest.QuestDtoBaseWithId;
 import com.generation.jadventures.model.dto.quest.QuestDtoRpost;
-import com.generation.jadventures.model.dto.quest.QuestDtoRput;
+import com.generation.jadventures.model.dto.quest.QuestDtoRputParty;
+import com.generation.jadventures.model.dto.quest.QuestDtoRputGuild;
 import com.generation.jadventures.model.dto.quest.QuestDtoWGuild;
 import com.generation.jadventures.model.dtoservices.QuestConverter;
 import com.generation.jadventures.model.entities.Quest;
@@ -129,8 +130,8 @@ public class QuestController {
 
     }
 
-    @PutMapping("/quests")
-    public ResponseEntity<?> modifyQuest(@RequestBody QuestDtoRput dto) {
+    @PutMapping("/quests/byguild")
+    public ResponseEntity<?> modifyQuestByGuild(@RequestBody QuestDtoRputGuild dto) {
 
         Quest q = qConv.dtoPutToQuest(dto);
         if (!possible_rank.contains(q.getQuest_rank()))
@@ -142,32 +143,39 @@ public class QuestController {
         if (!possible_status.contains(q.getStatus()))
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
-            Map<String, Integer> rankToNumber = new HashMap<>();
-
-            rankToNumber.put("S", 5);
-            rankToNumber.put("A", 4);
-            rankToNumber.put("B", 3);
-            rankToNumber.put("C", 2);
-            rankToNumber.put("D", 1);
-            
-            int rankParty = rankToNumber.get(q.getParty_quests().getRank());
-            int rankQuest = rankToNumber.get(q.getQuest_rank());
-    
-        if(rankParty<rankQuest)
-            {
-                return new ResponseEntity<String>("Rank incompatibile",HttpStatus.BAD_REQUEST);
-            }
-               
-
         if (!(q.getStatus().equals("SUCCESS") || q.getStatus().equals("FAILED"))) {
             q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
 
-        
-
         else
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
+
+    }
+
+    @PutMapping("/quests/byparty")
+    public ResponseEntity<?> modifyQuestByParty(@RequestBody QuestDtoRputParty dto) {
+
+        Quest q = qConv.dtoPutToQuest(dto);
+
+        Map<String, Integer> rankToNumber = new HashMap<>();
+
+        rankToNumber.put("S", 5);
+        rankToNumber.put("A", 4);
+        rankToNumber.put("B", 3);
+        rankToNumber.put("C", 2);
+        rankToNumber.put("D", 1);
+
+        int rankParty = rankToNumber.get(q.getParty_quests().getRank());
+        int rankQuest = rankToNumber.get(q.getQuest_rank());
+
+        if (rankParty >= rankQuest) {
+            q.setStatus("PENDING");
+            return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
+        }
+
+        else
+            return new ResponseEntity<String>("Rank incompatibile", HttpStatus.BAD_REQUEST);
 
     }
 
