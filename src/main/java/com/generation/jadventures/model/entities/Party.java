@@ -47,7 +47,7 @@ public class Party {
     private List<Adventurer> adventurers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "party_quests", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "myParty", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Quest> quests;
 
     public String getRank() {
