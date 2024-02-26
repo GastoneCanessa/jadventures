@@ -1,12 +1,15 @@
 package com.generation.jadventures.controllers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -139,10 +142,29 @@ public class QuestController {
         if (!possible_status.contains(q.getStatus()))
             return new ResponseEntity<String>("Hai inserito un status non valido", HttpStatus.BAD_REQUEST);
 
+            Map<String, Integer> rankToNumber = new HashMap<>();
+
+            rankToNumber.put("S", 5);
+            rankToNumber.put("A", 4);
+            rankToNumber.put("B", 3);
+            rankToNumber.put("C", 2);
+            rankToNumber.put("D", 1);
+            
+            int rankParty = rankToNumber.get(q.getParty_quests().getRank());
+            int rankQuest = rankToNumber.get(q.getQuest_rank());
+    
+        if(rankParty<rankQuest)
+            {
+                return new ResponseEntity<String>("Rank incompatibile",HttpStatus.BAD_REQUEST);
+            }
+               
+
         if (!(q.getStatus().equals("SUCCESS") || q.getStatus().equals("FAILED"))) {
             q.setDate_completed(null);
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
         }
+
+        
 
         else
             return new ResponseEntity<Quest>(qRepo.save(q), HttpStatus.OK);
