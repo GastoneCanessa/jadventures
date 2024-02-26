@@ -63,6 +63,19 @@ public class QuestController {
 
     }
 
+    @GetMapping("/quests/available")
+    public ResponseEntity<?> getAvailableQuests() {
+
+        List<QuestDtoBaseWithId> q = qRepo.findAll().stream().filter((e) -> e.getStatus().equals("AWAITING"))
+                .map((e) -> qConv.QUestDtoBaseWithId(e)).toList();
+
+        if (q != null)
+            return new ResponseEntity<List<QuestDtoBaseWithId>>(q, HttpStatus.OK);
+        else
+            return new ResponseEntity<String>("Nessuna quest available", HttpStatus.NOT_FOUND);
+
+    }
+
     @GetMapping("/quests/byguild/{id}")
     public ResponseEntity<?> getQuestByGuildId(@PathVariable Integer id) {
 
@@ -75,18 +88,18 @@ public class QuestController {
             return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
 
     }
-    //restituisce le quest con id di party
+
+    // restituisce le quest con id di party
     @GetMapping("/parties/myquests/{id}")
-    public ResponseEntity<?> getPartyQuests(@PathVariable Integer id)
-    {
-        List<Quest> quests=qRepo.findAll().stream().filter((q)->q.getParty_quests().getId()==id).collect(Collectors.toList());
-        if(quests!= null)
-        {
-            List<QuestDtoBaseWithId> q=quests.stream().map(a->qConv.QUestDtoBaseWithId(a)).collect(Collectors.toList());
+    public ResponseEntity<?> getPartyQuests(@PathVariable Integer id) {
+        List<Quest> quests = qRepo.findAll().stream().filter((q) -> q.getParty_quests().getId() == id)
+                .collect(Collectors.toList());
+        if (quests != null) {
+            List<QuestDtoBaseWithId> q = quests.stream().map(a -> qConv.QUestDtoBaseWithId(a))
+                    .collect(Collectors.toList());
             return new ResponseEntity<List<QuestDtoBaseWithId>>(q, HttpStatus.OK);
-        } 
-        else
-        return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
+        } else
+            return new ResponseEntity<String>("Nessuna quest presente", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/quests")
@@ -147,5 +160,4 @@ public class QuestController {
             return new ResponseEntity<String>("Non esiste quest con id " + id, HttpStatus.BAD_REQUEST);
     }
 
-    
 }
