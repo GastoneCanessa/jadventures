@@ -163,7 +163,7 @@ public class QuestController {
         Party p = pRepo.findById(dto.getParty_id()).get();
 
         Map<String, Integer> rankToNumber = new HashMap<>();
-
+        // qualcosaaa
         rankToNumber.put("S", 5);
         rankToNumber.put("A", 4);
         rankToNumber.put("B", 3);
